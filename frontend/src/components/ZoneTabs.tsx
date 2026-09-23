@@ -19,7 +19,7 @@ const IDLE =
 
 export default function ZoneTabs({ active }: { active: ZoneId }) {
   return (
-    <div className="flex items-center gap-space-xs overflow-x-auto pb-1 sm:pb-0">
+    <div className="max-w-full flex items-center gap-space-xs overflow-x-auto no-scrollbar">
       {ZONES.map((z) => {
         const isActive = z.id === active;
         const content = (

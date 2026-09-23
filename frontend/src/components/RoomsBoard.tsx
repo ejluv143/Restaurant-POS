@@ -143,10 +143,10 @@ export default function RoomsBoard({ rooms, qr, initialOrders }: { rooms: HotelR
   return (
     <div className="flex flex-col w-full">
       {/* Sub-Header Status & Sections Bar */}
-      <div className="w-full bg-surface-container-low px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-sm">
+      <div className="w-full bg-surface-container-low px-space-md sm:px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-sm">
         <ZoneTabs active="rooms" />
         {/* Real-time Live Metrics Telemetry Strip */}
-        <div className="flex items-center gap-space-lg bg-surface-container px-space-md py-1.5 rounded-lg">
+        <div className="max-w-full flex items-center gap-space-md sm:gap-space-lg bg-surface-container px-space-md py-1.5 rounded-lg overflow-x-auto no-scrollbar whitespace-nowrap [&>*]:shrink-0">
           <div className="flex items-center gap-space-xs">
             <span className="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
             <span className="font-label-sm text-label-sm text-on-surface-variant">Occupancy:</span>
@@ -177,8 +177,8 @@ export default function RoomsBoard({ rooms, qr, initialOrders }: { rooms: HotelR
       </div>
 
       {/* Filter Ribbon & Quick Actions */}
-      <div className="w-full bg-surface px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-sm">
-        <div className="flex items-center gap-space-xs overflow-x-auto">
+      <div className="w-full bg-surface px-space-md sm:px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-sm">
+        <div className="max-w-full flex items-center gap-space-xs overflow-x-auto no-scrollbar [&>*]:shrink-0 [&>*]:whitespace-nowrap">
           <button
             className={`px-space-md py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 transition-colors ${
               filter === "all" ? "bg-primary-container text-on-primary-container shadow-sm" : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest"
@@ -215,23 +215,23 @@ export default function RoomsBoard({ rooms, qr, initialOrders }: { rooms: HotelR
       </div>
 
       {/* Primary Work Area: Rooms Grid + Selected Room Rail */}
-      <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-gutter p-space-sm lg:p-space-md flex-1">
-        <div className="xl:col-span-8 flex flex-col gap-space-md">
-          <div className="relative w-full bg-surface-container-lowest rounded-xl p-space-lg overflow-hidden min-h-[720px] shadow-md flex flex-col gap-space-lg select-none">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter p-space-sm lg:p-space-md flex-1">
+        <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-space-md min-w-0">
+          <div className="relative w-full bg-surface-container-lowest rounded-xl p-space-md sm:p-space-lg overflow-hidden sm:min-h-[720px] shadow-md flex flex-col gap-space-lg select-none">
             {/* Architectural Floor Backdrop Guides */}
             <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#8d90a0_1px,transparent_1px)] [background-size:24px_24px]"></div>
             {floors.map((floor) => {
               const floorRooms = rooms.filter((r) => r.floor === floor);
               return (
                 <section key={floor} className="relative z-10 flex flex-col gap-space-md">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-space-xs">
                     <span className="px-space-sm py-0.5 rounded bg-surface-container-high font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
                       <span className="material-symbols-outlined text-[14px]">stairs</span> {FLOOR_NAMES[floor] ?? `Floor ${floor}`} • Rooms{" "}
                       {floorRooms[0].number}–{floorRooms[floorRooms.length - 1].number}
                     </span>
                     <span className="text-on-surface-variant font-label-sm text-label-sm">{"// QR ROOM-SERVICE ORDERING"}</span>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-space-lg">
+                  <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-space-lg">
                     {floorRooms.map((r) => {
                       const st = STATUS[r.status];
                       const isSelected = r.number === selected;
@@ -269,7 +269,7 @@ export default function RoomsBoard({ rooms, qr, initialOrders }: { rooms: HotelR
                             </div>
                           </div>
                           <div className="mt-space-sm space-y-1">
-                            <div className="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+                            <div className="flex items-center justify-between gap-2 text-on-surface-variant font-label-sm text-label-sm">
                               {busy ? (
                                 <>
                                   <span className="flex items-center gap-1 truncate">
@@ -295,7 +295,7 @@ export default function RoomsBoard({ rooms, qr, initialOrders }: { rooms: HotelR
                                 <p className="text-on-surface truncate">{o.lines.map((l) => `${l.qty}× ${l.name}`).join(", ")}</p>
                               </div>
                             ))}
-                            <div className="flex items-center justify-between font-label-md text-label-md bg-surface-container-highest/30 px-2 py-1 rounded">
+                            <div className="flex items-center justify-between gap-2 font-label-md text-label-md bg-surface-container-highest/30 px-2 py-1 rounded">
                               <span className="text-on-surface-variant font-label-sm text-label-sm">Room Service</span>
                               <span className={`font-label-md text-label-md font-bold ${chargeTotal(r) ? "text-on-surface" : "text-on-surface-variant"}`}>
                                 {chargeTotal(r) ? peso(chargeTotal(r)) : "No open tab"}
@@ -313,7 +313,7 @@ export default function RoomsBoard({ rooms, qr, initialOrders }: { rooms: HotelR
         </div>
 
         {/* Right Side Panel / Selected Room QR */}
-        <div className="xl:col-span-4 flex flex-col h-full">
+        <div className="lg:col-span-5 xl:col-span-4 flex flex-col h-full">
           <div className="bg-surface-container rounded-xl shadow-xl flex flex-col justify-between overflow-hidden flex-1">
             <div className="p-space-md bg-surface-container-high">
               <div className="flex items-center justify-between pb-space-xs">
@@ -453,7 +453,7 @@ export default function RoomsBoard({ rooms, qr, initialOrders }: { rooms: HotelR
           if (alert) setSelected(alert.room);
           setAlert(null);
         }}
-        className={`fixed bottom-16 right-8 z-50 bg-tertiary-container text-on-tertiary-container px-space-lg py-space-sm rounded-xl shadow-2xl flex items-center gap-space-sm transition-all duration-300 print:hidden ${
+        className={`fixed bottom-16 left-4 right-4 sm:left-auto sm:right-8 z-50 bg-tertiary-container text-on-tertiary-container px-space-lg py-space-sm rounded-xl shadow-2xl flex items-center gap-space-sm transition-all duration-300 print:hidden ${
           alert ? "" : "translate-y-24 opacity-0 pointer-events-none"
         }`}
       >

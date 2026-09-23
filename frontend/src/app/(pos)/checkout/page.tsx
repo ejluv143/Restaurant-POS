@@ -36,13 +36,13 @@ export default function CheckoutPage() {
   return (
     <div className="flex flex-col w-full">
       {/* Table Metadata Top Ticker */}
-      <div className="w-full bg-surface-container-low px-space-lg py-space-sm shadow-sm flex flex-wrap items-center justify-between gap-space-md select-none">
-        <div className="flex items-center gap-space-md">
+      <div className="w-full bg-surface-container-low px-space-md sm:px-space-lg py-space-sm shadow-sm flex flex-wrap items-center justify-between gap-space-sm sm:gap-space-md select-none">
+        <div className="flex flex-wrap items-center gap-space-sm sm:gap-space-md">
           <div className="flex items-center gap-space-xs bg-surface-container px-space-md py-1 rounded-full shadow-sm">
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
             <span className="font-label-sm text-label-sm text-tertiary">TABLE 12</span>
           </div>
-          <div className="flex items-center gap-space-xs text-on-surface">
+          <div className="flex flex-wrap items-center gap-x-space-xs text-on-surface">
             <span className="font-headline-sm text-headline-sm tracking-tight">Main Dining Room</span>
             <span className="text-on-surface-variant font-label-md text-label-md">/</span>
             <span className="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
@@ -53,8 +53,8 @@ export default function CheckoutPage() {
           </div>
         </div>
         {/* Live Bill Aggregates Ticker */}
-        <div className="flex items-center gap-space-lg">
-          <div className="flex items-center gap-space-md bg-surface-container-lowest px-space-md py-1 rounded-xl shadow-inner">
+        <div className="w-full sm:w-auto flex items-center justify-between gap-space-sm sm:gap-space-lg">
+          <div className="min-w-0 flex items-center gap-space-sm sm:gap-space-md bg-surface-container-lowest px-space-sm sm:px-space-md py-1 rounded-xl shadow-inner overflow-x-auto no-scrollbar [&>*]:shrink-0">
             <div className="flex flex-col text-right">
               <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">Paid Balance</span>
               <span className="font-label-md text-label-md text-secondary font-semibold tabular-nums">₱750.00</span>
@@ -70,7 +70,7 @@ export default function CheckoutPage() {
               <span className="font-label-lg text-label-lg text-primary tabular-nums font-bold tracking-tight">₱2,655.00</span>
             </div>
           </div>
-          <div className="flex items-center gap-space-xs">
+          <div className="flex items-center gap-space-xs shrink-0">
             <button
               className="h-10 px-space-md bg-surface-container hover:bg-surface-container-high active:scale-95 text-on-surface rounded-lg font-label-sm text-label-sm flex items-center gap-1 transition-all shadow-sm"
               type="button"
@@ -88,7 +88,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Workbench Grid */}
-      <div className="w-full p-space-md flex flex-col gap-space-md">
+      <div className="w-full p-space-sm sm:p-space-md flex flex-col gap-space-md">
         {/* Split Strategy Control Ribbon */}
         <div className="w-full bg-surface-container p-space-xs rounded-xl flex items-center justify-between gap-space-sm flex-wrap shadow-md">
           <div className="flex items-center gap-space-xs flex-wrap">
@@ -122,7 +122,7 @@ export default function CheckoutPage() {
               Single Full Payment
             </button>
           </div>
-          <div className="flex items-center gap-space-xs pr-space-xs">
+          <div className="flex flex-wrap items-center gap-space-xs px-space-xs">
             <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
               <span className="material-symbols-outlined text-[16px] text-secondary">pie_chart</span>
               Split Allocation:
@@ -137,7 +137,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* 3-Column Ergonomic Touch Workbench */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-space-md items-start">
           {/* COLUMN 1: Guest Split Checks (4 Cols) */}
           <div className="lg:col-span-4 flex flex-col gap-space-md">
             {/* Header / Mini status */}
@@ -190,7 +190,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
               {/* Financial Subtotals */}
-              <div className="flex items-center justify-between px-space-xs font-label-sm text-label-sm text-on-surface-variant pt-space-xs mb-1">
+              <div className="flex flex-wrap items-center justify-between gap-x-space-sm px-space-xs font-label-sm text-label-sm text-on-surface-variant pt-space-xs mb-1">
                 <span>Subtotal ₱1,305.00 • VAT 12% incl. ₱139.82</span>
                 <span className="text-on-surface">Guest Due</span>
               </div>
@@ -226,7 +226,7 @@ export default function CheckoutPage() {
                 <PriceRow name="Crispy Calamares (1/3)" price="₱110.00" />
               </div>
               {/* Payment Summary Row */}
-              <div className="flex items-center justify-between px-space-xs font-label-sm text-label-sm">
+              <div className="flex flex-wrap items-center justify-between gap-x-space-sm px-space-xs font-label-sm text-label-sm">
                 <span className="text-on-surface-variant">Paid via GCash • VAT incl. ₱80.36</span>
                 <span className="font-label-lg text-label-lg text-secondary font-bold tabular-nums">Settled: ₱750.00</span>
               </div>
@@ -265,7 +265,7 @@ export default function CheckoutPage() {
                 <PriceRow name="San Miguel Pale Pilsen" price="₱110.00" truncate />
                 <PriceRow name="Crispy Calamares (1/3)" price="₱110.00" truncate />
               </div>
-              <div className="flex items-baseline justify-between px-space-xs">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-space-sm px-space-xs">
                 <span className="font-label-sm text-label-sm text-on-surface-variant">Subtotal ₱600.00 • VAT 12% incl. ₱64.29</span>
                 <span className="font-label-lg text-label-lg text-on-surface font-bold tabular-nums">₱600.00</span>
               </div>
@@ -275,9 +275,9 @@ export default function CheckoutPage() {
           {/* COLUMN 2: Active Payment Terminal Action Console (5 Cols) */}
           <div className="lg:col-span-5 flex flex-col gap-space-md">
             {/* Interactive Tender Display Card */}
-            <div className="bg-surface-container rounded-xl p-space-lg shadow-xl relative overflow-hidden">
+            <div className="bg-surface-container rounded-xl p-space-md sm:p-space-lg shadow-xl relative overflow-hidden">
               {/* Header for active target */}
-              <div className="flex items-center justify-between mb-space-md pb-space-sm">
+              <div className="flex flex-wrap items-center justify-between gap-space-xs mb-space-md pb-space-sm">
                 <div className="flex items-center gap-space-sm">
                   <span className="p-2 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
                     <span className="material-symbols-outlined text-[24px]">point_of_sale</span>
@@ -297,20 +297,20 @@ export default function CheckoutPage() {
                   <span>BASE DUE FOR SEAT 1</span>
                   <span className="tabular-nums">₱1,305.00</span>
                 </div>
-                <div className="flex justify-between items-center text-secondary font-label-sm text-label-sm mb-1">
+                <div className="flex justify-between items-center gap-space-sm text-secondary font-label-sm text-label-sm mb-1">
                   <span className="flex items-center gap-1">
                     <span className="material-symbols-outlined text-[14px]">receipt_long</span> LESS 12% VAT EXEMPTION
                   </span>
                   <span className="tabular-nums font-bold">−₱139.82</span>
                 </div>
-                <div className="flex justify-between items-center text-secondary font-label-sm text-label-sm mb-2">
+                <div className="flex justify-between items-center gap-space-sm text-secondary font-label-sm text-label-sm mb-2">
                   <span className="flex items-center gap-1">
                     <span className="material-symbols-outlined text-[14px]">elderly</span> LESS SENIOR CITIZEN DISCOUNT (20%)
                   </span>
                   <span className="tabular-nums font-bold">−₱233.04</span>
                 </div>
                 <div className="h-px bg-surface-container-highest my-space-xs"></div>
-                <div className="flex justify-between items-baseline pt-1">
+                <div className="flex flex-wrap justify-between items-baseline gap-x-space-sm pt-1">
                   <div className="flex flex-col">
                     <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Total to Authorize</span>
                     <span className="font-label-sm text-label-sm text-tertiary">VAT-exempt sale • OSCA ID #12-4491</span>
@@ -322,7 +322,7 @@ export default function CheckoutPage() {
               </div>
               {/* Quick Discount Grid */}
               <div className="mb-space-md">
-                <div className="flex items-center justify-between mb-space-xs">
+                <div className="flex flex-wrap items-center justify-between gap-x-space-sm mb-space-xs">
                   <label className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Discount Presets</label>
                   <span className="font-label-sm text-label-sm text-secondary">OSCA / PWD ID required</span>
                 </div>
@@ -361,19 +361,19 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-2 gap-space-xs">
                   {/* Primary Card Terminal Trigger */}
                   <button
-                    className="col-span-2 min-h-[56px] px-space-md py-space-sm bg-primary-container hover:bg-primary-container/90 active:scale-[0.98] text-on-primary-container rounded-xl flex items-center justify-between shadow-lg transition-all select-none"
+                    className="col-span-2 min-h-[56px] px-space-md py-space-sm bg-primary-container hover:bg-primary-container/90 active:scale-[0.98] text-on-primary-container rounded-xl flex items-center justify-between gap-space-sm shadow-lg transition-all select-none"
                     type="button"
                   >
-                    <div className="flex items-center gap-space-md">
-                      <div className="w-10 h-10 rounded-lg bg-surface/30 flex items-center justify-center text-on-primary-container">
+                    <div className="flex items-center gap-space-sm sm:gap-space-md min-w-0">
+                      <div className="w-10 h-10 shrink-0 rounded-lg bg-surface/30 flex items-center justify-center text-on-primary-container">
                         <span className="material-symbols-outlined text-[24px]">qr_code_2</span>
                       </div>
-                      <div className="flex flex-col text-left">
+                      <div className="flex flex-col text-left min-w-0">
                         <span className="font-headline-sm text-headline-sm font-bold">GCash / QR Ph</span>
-                        <span className="font-label-sm text-label-sm text-on-primary-container/80">Scan QR • InstaPay • Instant Confirm</span>
+                        <span className="font-label-sm text-label-sm text-on-primary-container/80 truncate">Scan QR • InstaPay • Instant Confirm</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 font-label-md text-label-md font-bold tabular-nums">
+                    <div className="flex items-center gap-1 shrink-0 font-label-md text-label-md font-bold tabular-nums">
                       Send ₱932.14 <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                     </div>
                   </button>
@@ -387,7 +387,7 @@ export default function CheckoutPage() {
 
             {/* Split Progress Visualization */}
             <div className="bg-surface-container p-space-md rounded-xl shadow-sm flex flex-col gap-space-sm">
-              <div className="flex items-center justify-between text-label-sm font-label-sm">
+              <div className="flex flex-wrap items-center justify-between gap-x-space-sm text-label-sm font-label-sm">
                 <span className="text-on-surface-variant flex items-center gap-1">
                   <span className="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
                   Payment Session Completeness
@@ -399,7 +399,7 @@ export default function CheckoutPage() {
                 <div className="h-full bg-primary animate-pulse transition-all" style={{ width: "33.3%" }} title="Seat 1: Ready to charge"></div>
                 <div className="h-full bg-surface-container-highest transition-all" style={{ width: "33.4%" }} title="Seat 3: Waiting"></div>
               </div>
-              <div className="flex justify-between font-label-sm text-label-sm text-on-surface-variant pt-0.5">
+              <div className="flex flex-wrap justify-between gap-x-space-sm font-label-sm text-label-sm text-on-surface-variant pt-0.5">
                 <span className="text-secondary font-medium">• Seat 2 (₱750.00) Paid</span>
                 <span className="text-primary font-medium">• Seat 1 (₱932.14 w/ Senior disc.) Tendering</span>
                 <span className="text-on-surface-variant">• Seat 3 (₱600.00) Queued</span>
@@ -408,7 +408,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* COLUMN 3: Hardware Terminal Status, Cash Tender & Final Actions (3 Cols) */}
-          <div className="lg:col-span-3 flex flex-col gap-space-md">
+          <div className="md:col-span-2 lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-col gap-space-md items-start lg:items-stretch">
             {/* Live Integrated Hardware Hub Status */}
             <div className="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-xs">
               <div className="flex items-center justify-between">
@@ -522,7 +522,7 @@ export default function CheckoutPage() {
               <div className="h-px bg-surface-container-highest my-0.5"></div>
               {/* Final table close trigger */}
               <button
-                className="w-full min-h-[50px] bg-surface-container-highest hover:bg-surface-bright active:scale-[0.98] text-on-surface-variant hover:text-on-surface font-label-md text-label-md rounded-xl flex items-center justify-between px-space-md transition-all"
+                className="w-full min-h-[50px] bg-surface-container-highest hover:bg-surface-bright active:scale-[0.98] text-on-surface-variant hover:text-on-surface font-label-md text-label-md rounded-xl flex flex-wrap items-center justify-between gap-x-space-sm gap-y-1 px-space-md py-space-xs transition-all"
                 type="button"
               >
                 <div className="flex items-center gap-2">

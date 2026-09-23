@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-jakarta);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -67,16 +67,19 @@
   --spacing-space-xs: 0.25rem;
   --spacing-gutter: 0.75rem;
 
-  --font-label-lg: "JetBrains Mono", ui-monospace, monospace;
-  --font-label-sm: "JetBrains Mono", ui-monospace, monospace;
-  --font-label-md: "JetBrains Mono", ui-monospace, monospace;
-  --font-body-sm: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-body-md: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-body-lg: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-headline-sm: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-headline-md: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-headline-lg: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display-lg: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-label-lg: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-label-lg--font-feature-settings: "tnum";
+  --font-label-sm: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-label-sm--font-feature-settings: "tnum";
+  --font-label-md: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-label-md--font-feature-settings: "tnum";
+  --font-body-sm: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-sm: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-md: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display-lg: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
   --text-label-lg: 16px;
   --text-label-lg--line-height: 20px;
@@ -155,5 +158,13 @@
   .print-area {
     position: absolute;
     inset: 0 auto auto 0;
+  }
+}
+
+/* Horizontal swipe rows (nav tabs, zone tabs, filter chips) on phones and tablets */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

@@ -62,22 +62,22 @@ export default function OrderEntryPage() {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="w-full flex flex-col xl:flex-row gap-space-md p-space-md min-h-[calc(100vh-5.5rem)]">
+      <div className="w-full flex flex-col md:flex-row gap-space-md p-space-sm sm:p-space-md min-h-[calc(100vh-5.5rem)]">
         {/* LEFT COLUMN: Active Bill Pad / Ticket Rail (38% on large screens) */}
-        <aside className="w-full xl:w-[460px] 2xl:w-[490px] shrink-0 flex flex-col bg-surface-container-low rounded-xl shadow-xl overflow-hidden">
+        <aside className="w-full md:w-[330px] lg:w-[380px] xl:w-[460px] 2xl:w-[490px] shrink-0 flex flex-col bg-surface-container-low rounded-xl shadow-xl overflow-hidden">
           {/* Ticket Header / Seat & Table Meta */}
           <div className="bg-surface-container-high p-space-md flex flex-col gap-space-xs">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-space-sm">
-                <span className="px-space-sm py-0.5 rounded-lg bg-primary-container text-on-primary-container font-label-lg text-label-lg tracking-wider">T-12</span>
-                <div>
+            <div className="flex items-center justify-between gap-space-xs">
+              <div className="flex items-center gap-space-sm min-w-0">
+                <span className="shrink-0 whitespace-nowrap px-space-sm py-0.5 rounded-lg bg-primary-container text-on-primary-container font-label-lg text-label-lg tracking-wider">T-12</span>
+                <div className="min-w-0">
                   <h2 className="font-headline-sm text-headline-sm text-on-surface leading-tight">Dining Main • 4 Guests</h2>
-                  <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                  <span className="font-label-sm text-label-sm text-on-surface-variant flex flex-wrap items-center gap-x-1">
                     Server: <span className="text-on-surface font-medium">Andrea R.</span> • Check #10842 • Open 34m
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   className="w-10 h-10 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface flex items-center justify-center transition-all active:scale-95"
                   title="Split Bill by Seat"
@@ -255,7 +255,7 @@ export default function OrderEntryPage() {
             </div>
             <div className="flex justify-between items-baseline pt-1">
               <span className="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">Total Balance</span>
-              <span className="font-display-lg text-headline-lg text-primary font-bold tracking-tight">₱2,655.00</span>
+              <span className="font-display-lg text-headline-lg text-primary font-bold tracking-tight whitespace-nowrap">₱2,655.00</span>
             </div>
           </div>
 
@@ -279,7 +279,7 @@ export default function OrderEntryPage() {
             </button>
             {/* Options / Discounts */}
             <button
-              className="h-12 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-space-xs transition-colors active:scale-[0.98]"
+              className="min-h-12 px-space-xs rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg flex items-center justify-center text-center gap-space-xs transition-colors active:scale-[0.98]"
               type="button"
             >
               <span className="material-symbols-outlined text-[20px]">tune</span>
@@ -287,7 +287,7 @@ export default function OrderEntryPage() {
             </button>
             {/* Fast Pay Trigger (Blue) */}
             <button
-              className="h-12 rounded-lg bg-primary-container hover:bg-inverse-primary text-on-primary-container font-label-lg text-label-lg flex items-center justify-center gap-space-xs font-bold transition-colors active:scale-[0.98]"
+              className="min-h-12 px-space-xs rounded-lg bg-primary-container hover:bg-inverse-primary text-on-primary-container font-label-lg text-label-lg flex items-center justify-center text-center gap-space-xs font-bold transition-colors active:scale-[0.98]"
               type="button"
             >
               <span className="material-symbols-outlined text-[20px]">payments</span>
@@ -299,10 +299,10 @@ export default function OrderEntryPage() {
         {/* CENTER & RIGHT: High-Speed Touch Menu Matrix */}
         <section ref={sectionRef} onClick={onSectionClick} className="flex-1 flex flex-col gap-space-md min-w-0">
           {/* Top Section: Category Ribbons & Search/PLU Bar */}
-          <div className="flex flex-col gap-space-sm bg-surface-container-low p-space-md rounded-xl shadow-md">
+          <div className="flex flex-col gap-space-sm bg-surface-container-low p-space-sm sm:p-space-md rounded-xl shadow-md">
             {/* Search and Quick Action Bar */}
-            <div className="flex flex-wrap md:flex-nowrap items-center gap-space-sm">
-              <div className="relative flex-1 min-w-[240px]">
+            <div className="flex flex-wrap xl:flex-nowrap items-center gap-space-sm">
+              <div className="relative flex-1 min-w-[min(240px,100%)]">
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[22px]">search</span>
                 <input
                   className="w-full h-12 pl-11 pr-10 rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-body-md text-body-md outline-none focus:bg-surface-container-high transition-colors"
@@ -319,7 +319,7 @@ export default function OrderEntryPage() {
                   <span className="material-symbols-outlined text-[20px]">barcode_scanner</span>
                 </button>
               </div>
-              <div className="flex items-center gap-space-xs shrink-0">
+              <div className="flex items-center gap-space-xs shrink-0 max-w-full overflow-x-auto no-scrollbar">
                 <button
                   className="h-12 px-space-md rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center gap-1.5 font-label-md text-label-md transition-all active:scale-95"
                   type="button"
@@ -344,7 +344,7 @@ export default function OrderEntryPage() {
               </div>
             </div>
             {/* High-Density Horizontal Category Ribbon Tabs */}
-            <nav aria-label="Menu Categories" className="flex items-center gap-space-xs overflow-x-auto pb-1 scrollbar-none">
+            <nav aria-label="Menu Categories" className="flex items-center gap-space-xs overflow-x-auto pb-1 scrollbar-none no-scrollbar">
               {CATEGORIES.map((c) =>
                 c === ACTIVE_CATEGORY ? (
                   <button
@@ -369,11 +369,11 @@ export default function OrderEntryPage() {
           </div>
 
           {/* Menu Items Grid (Primary Visual Touch Surface) */}
-          <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-space-md content-start auto-rows-fr overflow-y-auto">
+          <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-space-sm sm:gap-space-md content-start auto-rows-fr overflow-y-auto">
             {MENU_TILES.map((tile) => (
               <button
                 key={tile.code}
-                className="group relative flex flex-col justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container active:scale-[0.98] transition-all text-left shadow-md overflow-hidden min-h-[160px]"
+                className="group relative flex flex-col justify-between p-space-sm sm:p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container active:scale-[0.98] transition-all text-left shadow-md overflow-hidden min-h-[160px]"
                 type="button"
               >
                 {tile.badge === "low-stock" && (
@@ -409,8 +409,8 @@ export default function OrderEntryPage() {
           </div>
 
           {/* Quick Modifier Ribbon & Kitchen Overrides (Sticky at bottom of Menu area) */}
-          <div className="bg-surface-container-low p-space-md rounded-xl shadow-lg flex flex-col gap-space-xs">
-            <div className="flex items-center justify-between text-on-surface-variant">
+          <div className="bg-surface-container-low p-space-sm sm:p-space-md rounded-xl shadow-lg flex flex-col gap-space-xs">
+            <div className="flex flex-wrap items-center justify-between gap-x-space-sm text-on-surface-variant">
               <span className="font-label-sm text-label-sm font-semibold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[16px] text-tertiary">bolt</span> Quick Modifiers &amp; Shift Notes
               </span>

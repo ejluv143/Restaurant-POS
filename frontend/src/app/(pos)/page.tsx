@@ -15,10 +15,10 @@ export default function FloorPlanPage() {
   return (
     <div className="flex flex-col w-full">
       {/* Sub-Header Status & Sections Bar */}
-      <div className="w-full bg-surface-container-low px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-sm">
+      <div className="w-full bg-surface-container-low px-space-md sm:px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-sm">
         <ZoneTabs active="dining" />
         {/* Real-time Live Metrics Telemetry Strip */}
-        <div className="flex items-center gap-space-lg bg-surface-container px-space-md py-1.5 rounded-lg">
+        <div className="max-w-full flex items-center gap-space-md sm:gap-space-lg bg-surface-container px-space-md py-1.5 rounded-lg overflow-x-auto no-scrollbar whitespace-nowrap [&>*]:shrink-0">
           <div className="flex items-center gap-space-xs">
             <span className="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
             <span className="font-label-sm text-label-sm text-on-surface-variant">Capacity:</span>
@@ -42,8 +42,8 @@ export default function FloorPlanPage() {
       </div>
 
       {/* Filter Ribbon & Quick Floor Actions */}
-      <div className="w-full bg-surface px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-sm">
-        <div className="flex items-center gap-space-xs overflow-x-auto">
+      <div className="w-full bg-surface px-space-md sm:px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-sm">
+        <div className="max-w-full flex items-center gap-space-xs overflow-x-auto no-scrollbar [&>*]:shrink-0 [&>*]:whitespace-nowrap">
           <button className="px-space-md py-1 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm flex items-center gap-1 shadow-sm" type="button">
             <span>All Tables</span>
             <span className="px-1.5 py-0.2 rounded-full bg-surface-container-lowest/40 text-on-primary font-label-sm text-label-sm">24</span>
@@ -89,15 +89,15 @@ export default function FloorPlanPage() {
       </div>
 
       {/* Primary Work Area: Floor Plan Grid (Left ~68%) + Detail Rail (Right ~32%) */}
-      <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-gutter p-space-sm lg:p-space-md flex-1">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter p-space-sm lg:p-space-md flex-1">
         {/* Floor Map Canvas Area (Span 8) */}
-        <div className="xl:col-span-8 flex flex-col gap-space-md">
-          <div className="relative w-full bg-surface-container-lowest rounded-xl p-space-lg overflow-hidden min-h-[720px] shadow-md flex flex-col justify-between select-none">
+        <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-space-md min-w-0">
+          <div className="relative w-full bg-surface-container-lowest rounded-xl p-space-md sm:p-space-lg overflow-hidden sm:min-h-[720px] shadow-md flex flex-col justify-between select-none">
             {/* Architectural Floor Backdrop Guides */}
             <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#8d90a0_1px,transparent_1px)] [background-size:24px_24px]"></div>
             {/* Architectural Annotations & Landmarks */}
-            <div className="relative z-10 flex items-center justify-between pb-space-md">
-              <div className="flex items-center gap-space-sm">
+            <div className="relative z-10 flex flex-wrap items-center justify-between gap-space-sm pb-space-md">
+              <div className="flex flex-wrap items-center gap-space-sm">
                 <span className="px-space-sm py-0.5 rounded bg-surface-container-high font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
                   <span className="material-symbols-outlined text-[14px]">door_front</span> Main Entrance • Host Stand
                 </span>
@@ -111,7 +111,7 @@ export default function FloorPlanPage() {
             </div>
 
             {/* Interactive 2D Floor Layout */}
-            <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-space-lg my-auto py-space-md">
+            <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-space-md sm:gap-space-lg my-auto py-space-md">
               {/* TABLE T1: Booth 4-top (Active / Selected) */}
               <div
                 onClick={() => setSelected("T1")}
@@ -145,7 +145,7 @@ export default function FloorPlanPage() {
                     </span>
                     <span className="text-primary font-semibold">42m</span>
                   </div>
-                  <div className="flex items-center justify-between font-label-md text-label-md pt-1 bg-surface-container-highest/30 px-2 py-1 rounded">
+                  <div className="flex items-center justify-between gap-2 font-label-md text-label-md pt-1 bg-surface-container-highest/30 px-2 py-1 rounded">
                     <span className="text-on-surface-variant font-label-sm text-label-sm">Active Bill</span>
                     <span className="font-label-md text-label-md text-on-surface font-bold">₱1,965.00</span>
                   </div>
@@ -182,7 +182,7 @@ export default function FloorPlanPage() {
                     </span>
                     <span className="text-tertiary font-semibold">1h 10m</span>
                   </div>
-                  <div className="flex items-center justify-between font-label-md text-label-md pt-1 bg-surface-container-highest/30 px-2 py-1 rounded">
+                  <div className="flex items-center justify-between gap-2 font-label-md text-label-md pt-1 bg-surface-container-highest/30 px-2 py-1 rounded">
                     <span className="text-on-surface-variant font-label-sm text-label-sm">Check Dropped</span>
                     <span className="font-label-md text-label-md text-tertiary font-bold">₱1,240.00</span>
                   </div>
@@ -191,7 +191,7 @@ export default function FloorPlanPage() {
               {/* TABLE T3: 6-top Large Booth (Seated / Paolo V.) */}
               <div
                 onClick={() => setSelected("T3")}
-                className={`cursor-pointer group relative rounded-xl ${bg("T3", "bg-surface-container")} p-space-md shadow-sm transition-all hover:bg-surface-container-high md:col-span-2`}
+                className={`cursor-pointer group relative rounded-xl ${bg("T3", "bg-surface-container")} p-space-md shadow-sm transition-all hover:bg-surface-container-high col-span-2`}
                 id="table-T3"
               >
                 <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm shadow-sm flex items-center gap-1">
@@ -290,7 +290,7 @@ export default function FloorPlanPage() {
                   <span className="w-2.5 h-1.5 rounded-full bg-primary"></span>
                   <span className="w-2.5 h-1.5 rounded-full bg-primary"></span>
                 </div>
-                <div className="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm mt-1">
+                <div className="flex flex-wrap items-center justify-between gap-x-2 text-on-surface-variant font-label-sm text-label-sm mt-1">
                   <span>Andrea R. • 26m</span>
                   <span className="text-on-surface font-semibold font-label-md text-label-md">₱620.00</span>
                 </div>
@@ -308,7 +308,7 @@ export default function FloorPlanPage() {
                   <span className="w-2.5 h-1.5 rounded-full bg-tertiary"></span>
                   <span className="w-2.5 h-1.5 rounded-full bg-tertiary"></span>
                 </div>
-                <div className="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm mt-1">
+                <div className="flex flex-wrap items-center justify-between gap-x-2 text-on-surface-variant font-label-sm text-label-sm mt-1">
                   <span>Carlo M. • 54m</span>
                   <span className="text-tertiary font-semibold font-label-md text-label-md">₱980.00</span>
                 </div>
@@ -333,13 +333,13 @@ export default function FloorPlanPage() {
 
             {/* Perimeter / Bar Seating Rail (B1 to B6) */}
             <div className="relative z-10 pt-space-md">
-              <div className="flex items-center justify-between pb-space-xs">
+              <div className="flex flex-wrap items-center justify-between gap-x-space-sm pb-space-xs">
                 <span className="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-tertiary text-[18px]">wine_bar</span> Oakwood Bar Counter Rail
                 </span>
                 <span className="font-label-sm text-label-sm text-on-surface-variant">Bartender: Jomar L. • 5/6 Occupied</span>
               </div>
-              <div className="grid grid-cols-6 gap-space-sm bg-surface-container p-space-sm rounded-xl">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-space-sm bg-surface-container p-space-sm rounded-xl">
                 {/* Stool B1 */}
                 <div className="bg-surface-container-high rounded-lg p-space-xs flex flex-col items-center justify-between text-center cursor-pointer hover:bg-surface-container-highest transition-colors">
                   <span className="font-label-md text-label-md font-bold text-on-surface">B1</span>
@@ -382,7 +382,7 @@ export default function FloorPlanPage() {
         </div>
 
         {/* Right Side Panel / Selected Table Detail Drawer (Span 4) */}
-        <div className="xl:col-span-4 flex flex-col h-full">
+        <div className="lg:col-span-5 xl:col-span-4 flex flex-col h-full">
           <div className="bg-surface-container rounded-xl shadow-xl flex flex-col justify-between overflow-hidden flex-1">
             {/* Drawer Header / Selected Target Identity */}
             <div className="p-space-md bg-surface-container-high">
@@ -495,7 +495,7 @@ export default function FloorPlanPage() {
 function BillItem({ qty, name, mods, price }: { qty: number; name: string; mods: string; price: string }) {
   return (
     <div className="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-space-sm">
         <div className="flex items-start gap-space-xs">
           <span className="w-5 h-5 rounded bg-surface-container flex items-center justify-center font-label-sm text-label-sm text-on-surface font-bold">{qty}</span>
           <div>

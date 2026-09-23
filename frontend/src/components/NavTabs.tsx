@@ -18,11 +18,11 @@ const IDLE =
 export default function NavTabs() {
   const path = usePathname();
   return (
-    <nav className="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-xl">
+    <nav className="order-last lg:order-none w-full lg:w-auto flex items-center gap-space-xs bg-surface-container-low p-1 rounded-xl overflow-x-auto no-scrollbar">
       {NAV.map((item) => {
         const active = item.match.includes(path);
         return (
-          <Link key={item.label} href={item.href} aria-current={active ? "page" : undefined} className={active ? ACTIVE : IDLE}>
+          <Link key={item.label} href={item.href} aria-current={active ? "page" : undefined} className={`${active ? ACTIVE : IDLE} shrink-0 whitespace-nowrap`}>
             {item.label}
           </Link>
         );

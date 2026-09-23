@@ -220,11 +220,11 @@ export default function KitchenDisplayPage() {
   return (
     <div className="flex flex-col w-full">
       {/* Top KDS Control Bar & Metric Strip */}
-      <section className="w-full bg-surface-container-low px-space-lg py-space-sm flex flex-col gap-space-sm shadow-md">
+      <section className="w-full bg-surface-container-low px-space-md sm:px-space-lg py-space-sm flex flex-col gap-space-sm shadow-md">
         {/* Row 1: Station Selector & Utility Controls */}
         <div className="flex flex-wrap items-center justify-between gap-space-md">
           {/* Active Station Filter Tabs */}
-          <div className="flex items-center gap-space-xs bg-surface-container-lowest p-1 rounded-xl overflow-x-auto max-w-full">
+          <div className="flex items-center gap-space-xs bg-surface-container-lowest p-1 rounded-xl overflow-x-auto no-scrollbar max-w-full">
             {STATIONS.map((s, i) => (
               <button
                 key={s.label}
@@ -247,7 +247,7 @@ export default function KitchenDisplayPage() {
             ))}
           </div>
           {/* Action Toggles */}
-          <div className="flex items-center gap-space-xs bg-surface-container-lowest p-1 rounded-xl shrink-0">
+          <div className="flex flex-wrap items-center gap-space-xs bg-surface-container-lowest p-1 rounded-xl max-w-full">
             {/* Sound Alert Toggle */}
             <button
               className="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors"
@@ -334,7 +334,7 @@ export default function KitchenDisplayPage() {
 
       {/* Live Orders Workspace / Grid */}
       <section
-        className={view === "grid" ? "p-space-md grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md w-full" : "p-space-md grid grid-cols-1 md:grid-cols-2 gap-space-md w-full"}
+        className={view === "grid" ? "p-space-sm sm:p-space-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-space-md w-full" : "p-space-sm sm:p-space-md grid grid-cols-1 md:grid-cols-2 gap-space-md w-full"}
         id="ticketContainer"
       >
         {chits.map((c) => (
@@ -461,7 +461,7 @@ export default function KitchenDisplayPage() {
       </div>
 
       {/* Bottom Bump Bar Shortcut Guide (Fixed Utilitarian Footer Strip) */}
-      <div className="w-full bg-surface-container-lowest px-space-lg py-2.5 shadow-inner flex flex-wrap items-center justify-between gap-space-md z-40 select-none">
+      <div className="w-full bg-surface-container-lowest px-space-md sm:px-space-lg py-2.5 shadow-inner flex flex-wrap items-center justify-between gap-space-md z-40 select-none">
         <div className="flex items-center gap-space-md text-on-surface-variant font-label-sm text-label-sm">
           <Shortcut k="SPACE" label="Bump Next Ticket" />
           <span className="text-outline-variant">•</span>

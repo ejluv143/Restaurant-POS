@@ -11,16 +11,16 @@ const TOOLS = [
 export default function PosLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-surface-container/95 backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.35)]">
-        <div className="h-16 w-full px-space-lg flex items-center justify-between gap-space-md">
-          <div className="flex items-center gap-space-md shrink-0">
+      <header className="sticky top-0 lg:fixed lg:left-0 lg:right-0 z-50 bg-surface-container/95 backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.35)]">
+        <div className="w-full px-space-md sm:px-space-lg py-space-sm lg:py-0 lg:h-16 flex flex-wrap lg:flex-nowrap items-center justify-between gap-x-space-md gap-y-space-sm">
+          <div className="flex items-center gap-space-md min-w-0 lg:shrink-0">
             <img
               alt="SynchubPOS Logo"
               className="h-8 w-auto object-contain"
               src="https://lh3.googleusercontent.com/aida/AEtjO1Ufn0ajT4HGsOQo9540HhgvWi5-OR8RF9jxnjNOcYch-E9VVFzFhmFS7QhEMn3x2TE248oa2lpuTHVjkxu8JFsOhaEZG9pH9Mf33GAKm4A4Vhcic4MhYonk9OXFtzAI8-41qL5JGELBpr72RXYpS3X3dYcZrUju8RauQidNBKOVdq_5rdakpO0DxTUKTuML00ANSvx3eQ_EYw_xij9WJVq77T-jA7XFXRn8Ykyhi-AP188kMH4Xm_luWQbH"
             />
-            <div className="flex flex-col">
-              <span className="font-headline-sm text-headline-sm text-on-surface leading-tight tracking-tight">The Oakwood Bistro</span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-headline-sm text-headline-sm text-on-surface leading-tight tracking-tight truncate">The Oakwood Bistro</span>
               <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-space-xs">
                 Terminal #04 • Dining Main
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-secondary ml-1 animate-pulse"></span>
@@ -30,7 +30,7 @@ export default function PosLayout({ children }: { children: React.ReactNode }) {
           </div>
           <NavTabs />
           <div className="flex items-center gap-space-sm shrink-0">
-            <div className="flex items-center gap-space-xs bg-surface-container-lowest p-1 rounded-lg">
+            <div className="hidden sm:flex items-center gap-space-xs bg-surface-container-lowest p-1 rounded-lg">
               {TOOLS.map((tool) => (
                 <button
                   key={tool.icon}
@@ -57,10 +57,10 @@ export default function PosLayout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main className="w-full pt-16 bg-surface min-h-[calc(100vh-2.5rem)]">{children}</main>
+      <main className="w-full lg:pt-16 bg-surface min-h-[calc(100vh-2.5rem)]">{children}</main>
 
       <footer className="w-full bg-surface-container-lowest py-space-xs px-space-lg text-center">
-        <div className="w-full flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+        <div className="w-full flex flex-wrap items-center justify-center sm:justify-between gap-x-space-md gap-y-space-xs text-on-surface-variant font-label-sm text-label-sm">
           <span>SynchubPOS v4.18.2 • Station ID #04</span>
           <span className="flex items-center gap-space-xs">
             <span className="inline-block w-2 h-2 rounded-full bg-secondary"></span>Cloud Sync Active (0.12s latency)
