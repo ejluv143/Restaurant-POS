@@ -16,7 +16,8 @@ const IDLE =
   "font-label-md text-label-md px-space-lg py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all select-none";
 
 export default function NavTabs() {
-  const path = usePathname();
+  // The GitHub Pages build uses trailingSlash, so "/order-entry/" must still match "/order-entry"
+  const path = usePathname().replace(/(.)\/$/, "$1");
   return (
     <nav className="order-last lg:order-none w-full lg:w-auto flex items-center gap-space-xs bg-surface-container-low p-1 rounded-xl overflow-x-auto no-scrollbar">
       {NAV.map((item) => {

@@ -9,7 +9,8 @@ const links = [
 ];
 
 export default function Header() {
-  const path = usePathname();
+  // The GitHub Pages build uses trailingSlash, so "/orders/" must still match "/orders"
+  const path = usePathname().replace(/(.)\/$/, "$1");
   return (
     <header className="flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-3 print:hidden dark:border-zinc-800 dark:bg-zinc-900">
       <h1 className="text-xl font-bold">🍽️ SynchubPOS</h1>
