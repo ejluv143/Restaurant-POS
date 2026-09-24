@@ -31,6 +31,8 @@ Open http://localhost:3000. Phones and tablets on the same Wi-Fi can use `http:/
 
 Each of us has **one GitHub issue per working day**. Every issue has a goal, a checklist, a **Done when** section and the files to start from. Issues are labelled `daily-task` plus their module (e.g. `module: kitchen`) and belong to the current sprint milestone.
 
+**Board:** [Synchub POS Sprint Board](https://github.com/users/ejluv143/projects/1), a Trello-style board with columns **To Do → In Progress → Review → Done**. Every daily issue is a card with its **Module**, **Date** and **Day**. Filter by `assignee:@me` to see only your cards.
+
 ### Every day
 
 1. Open **your issue for today** (table below, or filter [`is:open label:daily-task assignee:@me`](https://github.com/ejluv143/Restaurant-POS/issues?q=is%3Aopen+label%3Adaily-task+assignee%3A%40me)).
