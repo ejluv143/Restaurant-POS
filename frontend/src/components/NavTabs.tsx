@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV = [
-  // Hotel Rooms is a zone of the floor plan, so it keeps "Floor Plan" highlighted
-  { label: "Floor Plan", href: "/", match: ["/", "/rooms"] },
+  // The zones (patio, bar, private dining, hotel rooms) are part of the floor plan, so they keep "Floor Plan" highlighted
+  { label: "Floor Plan", href: "/", match: ["/", "/patio", "/bar", "/private", "/rooms"] },
   { label: "Order Entry", href: "/order-entry", match: ["/order-entry"] },
   { label: "Checkout & Pay", href: "/checkout", match: ["/checkout"] },
   { label: "Kitchen Display / KDS", href: "/kitchen", match: ["/kitchen"] },

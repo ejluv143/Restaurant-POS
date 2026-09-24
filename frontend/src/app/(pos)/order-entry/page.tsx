@@ -1,26 +1,34 @@
 "use client";
 
-import { useRef } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useRef, useState } from "react";
+import ModifierEditor from "@/components/ModifierEditor";
+import TablePicker from "@/components/TablePicker";
+import { FLOOR_TABLES, billTotal, type BillLine, type TableId } from "@/lib/floorTables";
+import { MODIFIERS } from "@/lib/modifiers";
+import { peso } from "@/lib/rooms";
+import { addLine, changeQty, isSample, removeLine, sendTicket, useTableBills } from "@/lib/tableBills";
 
 interface MenuTile {
   code: string;
   name: string;
   desc: string;
-  price: string;
+  price: number;
   /** Material Symbols icon shown until a dish photo is added */
   icon: string;
   badge?: "low-stock" | "chef-pick";
 }
 
 const MENU_TILES: MenuTile[] = [
-  { code: "#M-101", name: "Crispy Pata (Whole)", desc: "Deep-fried pork knuckle, soy-vinegar dip", price: "₱895.00", icon: "kebab_dining", badge: "low-stock" },
-  { code: "#M-102", name: "Kare-Kare", desc: "Oxtail & tripe in peanut sauce, bagoong", price: "₱650.00", icon: "soup_kitchen" },
-  { code: "#M-103", name: "Sinigang na Hipon", desc: "Tamarind broth, prawns, kangkong, radish", price: "₱520.00", icon: "ramen_dining" },
-  { code: "#M-104", name: "Chicken Inasal", desc: "Bacolod-style grilled chicken, annatto oil", price: "₱320.00", icon: "outdoor_grill", badge: "chef-pick" },
-  { code: "#M-105", name: "Lechon Kawali", desc: "Crispy pork belly, Mang Tomas liver sauce", price: "₱450.00", icon: "restaurant" },
-  { code: "#M-106", name: "Bistek Tagalog", desc: "Beef sirloin, calamansi-soy, onion rings", price: "₱480.00", icon: "lunch_dining" },
-  { code: "#M-107", name: "Sizzling Sisig", desc: "Pork cheek, chili & egg on a hot plate", price: "₱380.00", icon: "skillet" },
-  { code: "#M-108", name: "Adobong Manok", desc: "Chicken braised in soy, vinegar & garlic", price: "₱340.00", icon: "rice_bowl" },
+  { code: "#M-101", name: "Crispy Pata (Whole)", desc: "Deep-fried pork knuckle, soy-vinegar dip", price: 895, icon: "kebab_dining", badge: "low-stock" },
+  { code: "#M-102", name: "Kare-Kare", desc: "Oxtail & tripe in peanut sauce, bagoong", price: 650, icon: "soup_kitchen" },
+  { code: "#M-103", name: "Sinigang na Hipon", desc: "Tamarind broth, prawns, kangkong, radish", price: 520, icon: "ramen_dining" },
+  { code: "#M-104", name: "Chicken Inasal", desc: "Bacolod-style grilled chicken, annatto oil", price: 320, icon: "outdoor_grill", badge: "chef-pick" },
+  { code: "#M-105", name: "Lechon Kawali", desc: "Crispy pork belly, Mang Tomas liver sauce", price: 450, icon: "restaurant" },
+  { code: "#M-106", name: "Bistek Tagalog", desc: "Beef sirloin, calamansi-soy, onion rings", price: 480, icon: "lunch_dining" },
+  { code: "#M-107", name: "Sizzling Sisig", desc: "Pork cheek, chili & egg on a hot plate", price: 380, icon: "skillet" },
+  { code: "#M-108", name: "Adobong Manok", desc: "Chicken braised in soy, vinegar & garlic", price: 340, icon: "rice_bowl" },
 ];
 
 const CATEGORIES = [
@@ -38,7 +46,30 @@ const MODIFIER =
   "h-12 px-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high active:bg-primary-container active:text-on-primary-container text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center text-center leading-tight select-none";
 
 export default function OrderEntryPage() {
+  // The table comes from ?table=T1; the static export prerenders the no-table view until the URL is read
+  return (
+    <Suspense fallback={<OrderEntry tableId={null} />}>
+      <OrderEntryForUrl />
+    </Suspense>
+  );
+}
+
+function OrderEntryForUrl() {
+  const table = useSearchParams().get("table");
+  return <OrderEntry tableId={table !== null && table in FLOOR_TABLES ? (table as TableId) : null} />;
+}
+
+function OrderEntry({ tableId }: { tableId: TableId | null }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const [adding, setAdding] = useState<BillLine | null>(null);
+
+  // Dishes with options open the modifier window first; the rest go straight onto the ticket
+  const onTile = (tile: MenuTile) => {
+    if (!tableId) return;
+    const line: BillLine = { qty: 1, name: tile.name, mods: "", price: tile.price };
+    if (MODIFIERS[tile.name]?.length) setAdding(line);
+    else addLine(tableId, line);
+  };
 
   // Lightweight POS tactile feedback and search handling (mirrors the design's script,
   // which targets every button inside a `.grid` in this section)
@@ -65,235 +96,15 @@ export default function OrderEntryPage() {
       <div className="w-full flex flex-col md:flex-row gap-space-md p-space-sm sm:p-space-md min-h-[calc(100vh-5.5rem)]">
         {/* LEFT COLUMN: Active Bill Pad / Ticket Rail (38% on large screens) */}
         <aside className="w-full md:w-[330px] lg:w-[380px] xl:w-[460px] 2xl:w-[490px] shrink-0 flex flex-col bg-surface-container-low rounded-xl shadow-xl overflow-hidden">
-          {/* Ticket Header / Seat & Table Meta */}
-          <div className="bg-surface-container-high p-space-md flex flex-col gap-space-xs">
-            <div className="flex items-center justify-between gap-space-xs">
-              <div className="flex items-center gap-space-sm min-w-0">
-                <span className="shrink-0 whitespace-nowrap px-space-sm py-0.5 rounded-lg bg-primary-container text-on-primary-container font-label-lg text-label-lg tracking-wider">T-12</span>
-                <div className="min-w-0">
-                  <h2 className="font-headline-sm text-headline-sm text-on-surface leading-tight">Dining Main • 4 Guests</h2>
-                  <span className="font-label-sm text-label-sm text-on-surface-variant flex flex-wrap items-center gap-x-1">
-                    Server: <span className="text-on-surface font-medium">Andrea R.</span> • Check #10842 • Open 34m
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  className="w-10 h-10 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface flex items-center justify-center transition-all active:scale-95"
-                  title="Split Bill by Seat"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[20px]">call_split</span>
-                </button>
-                <button
-                  className="w-10 h-10 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface flex items-center justify-center transition-all active:scale-95"
-                  title="Transfer Check"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[20px]">sync_alt</span>
-                </button>
-              </div>
-            </div>
-            {/* Course Badges & Pacing Trackers */}
-            <div className="grid grid-cols-2 gap-space-xs mt-space-xs">
-              <div className="flex items-center justify-between px-space-sm py-1.5 rounded-lg bg-secondary-container/20 text-secondary">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="w-2 h-2 rounded-full bg-secondary shrink-0 animate-pulse"></span>
-                  <span className="font-label-sm text-label-sm font-semibold truncate">C1: Apps</span>
-                </div>
-                <span className="font-label-sm text-label-sm opacity-90 shrink-0">Sent 12m ago</span>
-              </div>
-              <div className="flex items-center justify-between px-space-sm py-1.5 rounded-lg bg-tertiary-container/25 text-tertiary">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="w-2 h-2 rounded-full bg-tertiary shrink-0"></span>
-                  <span className="font-label-sm text-label-sm font-semibold truncate">C2: Mains</span>
-                </div>
-                <span className="font-label-sm text-label-sm opacity-90 shrink-0 font-medium tracking-wide">HOLD</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Ticket Items Segregated by Seat / Course */}
-          <div className="flex-1 overflow-y-auto p-space-sm space-y-space-sm text-on-surface" id="ticket-scroll-container">
-            {/* Shared Table Items Section */}
-            <div className="bg-surface-container rounded-lg p-space-sm space-y-space-xs">
-              <div className="flex items-center justify-between px-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-tertiary">dinner_dining</span>
-                  <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-wider font-semibold">Shared / Center Table</span>
-                </div>
-                <span className="px-1.5 py-0.5 rounded bg-secondary-container/30 text-secondary font-label-sm text-label-sm">Kitchen Fired</span>
-              </div>
-              <div className="bg-surface-container-high rounded p-space-xs flex items-center justify-between gap-space-xs group">
-                <div className="flex items-center gap-space-xs min-w-0">
-                  <span className="font-label-md text-label-md text-primary font-bold px-1.5 py-0.5 rounded bg-surface-container-highest">1×</span>
-                  <div className="min-w-0">
-                    <p className="font-body-md text-body-md text-on-surface font-medium truncate">Crispy Calamares</p>
-                    <p className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[13px] text-secondary">check_circle</span> Fired • Station: Fryer
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-space-xs shrink-0">
-                  <span className="font-label-md text-label-md text-on-surface">₱330.00</span>
-                  <button
-                    className="w-7 h-7 rounded bg-surface-container-highest hover:bg-error/20 text-on-surface-variant hover:text-error flex items-center justify-center transition-colors"
-                    title="Void or Hold Item"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">more_vert</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Seat 1 */}
-            <div className="bg-surface-container rounded-lg p-space-sm space-y-space-xs">
-              <SeatHeader seat={1} />
-              {/* Item 1: Bone-in Ribeye */}
-              <div className="bg-surface-container-high rounded p-space-xs space-y-1">
-                <div className="flex items-center justify-between gap-space-xs">
-                  <div className="flex items-center gap-space-xs min-w-0">
-                    <div className="flex items-center bg-surface-container-highest rounded px-1">
-                      <button className="text-on-surface-variant hover:text-on-surface text-label-sm font-bold px-1" title="Decrease">
-                        -
-                      </button>
-                      <span className="font-label-md text-label-md text-on-surface px-1 font-bold">1</span>
-                      <button className="text-on-surface-variant hover:text-on-surface text-label-sm font-bold px-1" title="Increase">
-                        +
-                      </button>
-                    </div>
-                    <span className="font-body-md text-body-md text-on-surface font-medium truncate">Crispy Pata (Whole)</span>
-                  </div>
-                  <span className="font-label-md text-label-md text-on-surface shrink-0 font-medium">₱895.00</span>
-                </div>
-                {/* Modifiers */}
-                <div className="pl-6 space-y-0.5 font-label-sm text-label-sm text-on-surface-variant">
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1">
-                      <span className="text-outline">•</span> Extra Crispy
-                    </span>
-                    <span className="text-secondary font-label-sm text-label-sm">Cook Style</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1">
-                      <span className="text-outline">•</span> Add Garlic Rice
-                    </span>
-                    <span className="text-on-surface font-label-sm text-label-sm">+₱60.00</span>
-                  </div>
-                </div>
-              </div>
-              {/* Item 2: Cabernet Sauvignon */}
-              <div className="bg-surface-container-high rounded p-space-xs flex items-center justify-between gap-space-xs">
-                <div className="flex items-center gap-space-xs min-w-0">
-                  <span className="font-label-md text-label-md text-primary font-bold px-1.5 py-0.5 rounded bg-surface-container-highest">1×</span>
-                  <div className="min-w-0">
-                    <p className="font-body-md text-body-md text-on-surface font-medium truncate">Calamansi Juice • Pitcher</p>
-                    <p className="font-label-sm text-label-sm text-on-surface-variant">Fresh-Squeezed • Less Sugar</p>
-                  </div>
-                </div>
-                <span className="font-label-md text-label-md text-on-surface shrink-0 font-medium">₱240.00</span>
-              </div>
-            </div>
-
-            {/* Seat 2 */}
-            <div className="bg-surface-container rounded-lg p-space-sm space-y-space-xs">
-              <SeatHeader seat={2} />
-              {/* Item 1: Salmon */}
-              <div className="bg-surface-container-high rounded p-space-xs space-y-1">
-                <div className="flex items-center justify-between gap-space-xs">
-                  <div className="flex items-center gap-space-xs min-w-0">
-                    <span className="font-label-md text-label-md text-primary font-bold px-1.5 py-0.5 rounded bg-surface-container-highest">1×</span>
-                    <span className="font-body-md text-body-md text-on-surface font-medium truncate">Sinigang na Hipon</span>
-                  </div>
-                  <span className="font-label-md text-label-md text-on-surface shrink-0 font-medium">₱520.00</span>
-                </div>
-                <div className="pl-6 space-y-0.5 font-label-sm text-label-sm text-on-surface-variant">
-                  <p className="flex items-center gap-1">
-                    <span className="text-outline">•</span> Extra Sour
-                  </p>
-                  <p className="flex items-center gap-1">
-                    <span className="text-outline">•</span> Extra Kangkong
-                  </p>
-                </div>
-              </div>
-              {/* Item 2: Sparkling Water */}
-              <SimpleLine name="Buko Juice (Fresh)" price="₱120.00" />
-            </div>
-
-            {/* Seat 3 */}
-            <div className="bg-surface-container rounded-lg p-space-sm space-y-space-xs">
-              <SeatHeader seat={3} />
-              {/* Item 1: Tagliatelle */}
-              <div className="bg-surface-container-high rounded p-space-xs space-y-1">
-                <div className="flex items-center justify-between gap-space-xs">
-                  <div className="flex items-center gap-space-xs min-w-0">
-                    <span className="font-label-md text-label-md text-primary font-bold px-1.5 py-0.5 rounded bg-surface-container-highest">1×</span>
-                    <span className="font-body-md text-body-md text-on-surface font-medium truncate">Pancit Canton Guisado</span>
-                  </div>
-                  <span className="font-label-md text-label-md text-on-surface shrink-0 font-medium">₱380.00</span>
-                </div>
-                <div className="pl-6 font-label-sm text-label-sm text-on-surface-variant">
-                  <p className="flex items-center gap-1">
-                    <span className="text-outline">•</span> Extra Calamansi
-                  </p>
-                </div>
-              </div>
-              {/* Item 2: Aperol Spritz */}
-              <SimpleLine name="San Miguel Pale Pilsen" price="₱110.00" />
-            </div>
-          </div>
-
-          {/* Ticket Totals Calculation Block */}
-          <div className="bg-surface-container-highest/60 p-space-md flex flex-col gap-space-xs">
-            <div className="flex justify-between font-body-md text-body-md text-on-surface-variant">
-              <span>Items (7 total)</span>
-              <span className="font-label-md text-label-md text-on-surface">₱2,655.00</span>
-            </div>
-            <div className="flex justify-between font-body-md text-body-md text-on-surface-variant">
-              <span>VAT 12% (Inclusive)</span>
-              <span className="font-label-md text-label-md text-on-surface">₱284.46</span>
-            </div>
-            <div className="flex justify-between items-baseline pt-1">
-              <span className="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">Total Balance</span>
-              <span className="font-display-lg text-headline-lg text-primary font-bold tracking-tight whitespace-nowrap">₱2,655.00</span>
-            </div>
-          </div>
-
-          {/* Ticket Bottom Action Touch Command Center */}
-          <div className="p-space-sm bg-surface-container-high grid grid-cols-2 gap-space-xs">
-            {/* Fire Course 2 (Amber) */}
-            <button
-              className="h-14 rounded-lg bg-tertiary hover:bg-tertiary-fixed text-on-tertiary font-headline-sm text-headline-sm flex items-center justify-center gap-space-xs font-semibold shadow-md active:scale-[0.98] transition-all"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[24px]">local_fire_department</span>
-              <span>Fire Mains</span>
-            </button>
-            {/* Send to Kitchen (Emerald) */}
-            <button
-              className="h-14 rounded-lg bg-secondary-container hover:bg-secondary text-on-secondary-container font-headline-sm text-headline-sm flex items-center justify-center gap-space-xs font-semibold shadow-md active:scale-[0.98] transition-all"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[24px]">send</span>
-              <span>Send Ticket</span>
-            </button>
-            {/* Options / Discounts */}
-            <button
-              className="min-h-12 px-space-xs rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg flex items-center justify-center text-center gap-space-xs transition-colors active:scale-[0.98]"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[20px]">tune</span>
-              <span>Discounts &amp; Comp</span>
-            </button>
-            {/* Fast Pay Trigger (Blue) */}
-            <button
-              className="min-h-12 px-space-xs rounded-lg bg-primary-container hover:bg-inverse-primary text-on-primary-container font-label-lg text-label-lg flex items-center justify-center text-center gap-space-xs font-bold transition-colors active:scale-[0.98]"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[20px]">payments</span>
-              <span>Fast Pay ₱2,655.00</span>
-            </button>
-          </div>
+          {tableId ? (
+            <TicketPad id={tableId} />
+          ) : (
+            <TablePicker
+              subtitle="Pick the table you are taking the order for, then tap dishes on the menu."
+              href={(id) => `/order-entry?table=${id}`}
+              blocked={(bill) => (bill.status === "bussing" ? "Clear the table before taking an order" : null)}
+            />
+          )}
         </aside>
 
         {/* CENTER & RIGHT: High-Speed Touch Menu Matrix */}
@@ -373,6 +184,7 @@ export default function OrderEntryPage() {
             {MENU_TILES.map((tile) => (
               <button
                 key={tile.code}
+                onClick={() => onTile(tile)}
                 className="group relative flex flex-col justify-between p-space-sm sm:p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container active:scale-[0.98] transition-all text-left shadow-md overflow-hidden min-h-[160px]"
                 type="button"
               >
@@ -399,7 +211,7 @@ export default function OrderEntryPage() {
                   <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">{tile.desc}</p>
                 </div>
                 <div className="flex items-center justify-between mt-space-sm pt-space-xs">
-                  <span className="font-label-lg text-label-lg text-primary font-bold">{tile.price}</span>
+                  <span className="font-label-lg text-label-lg text-primary font-bold">{peso(tile.price)}</span>
                   <span className="w-8 h-8 rounded-lg bg-surface-container-highest group-hover:bg-primary group-hover:text-on-primary text-on-surface-variant flex items-center justify-center transition-colors">
                     <span className="material-symbols-outlined text-[20px]">add</span>
                   </span>
@@ -446,29 +258,236 @@ export default function OrderEntryPage() {
           </div>
         </section>
       </div>
+
+      {adding && tableId && (
+        <ModifierEditor
+          mode="add"
+          line={adding}
+          onClose={() => setAdding(null)}
+          onSave={(line) => {
+            addLine(tableId, line);
+            setAdding(null);
+          }}
+        />
+      )}
     </div>
   );
 }
 
-function SeatHeader({ seat }: { seat: number }) {
-  return (
-    <div className="flex items-center justify-between px-1">
-      <span className="font-label-sm text-label-sm text-primary font-semibold tracking-wide flex items-center gap-1">
-        <span className="material-symbols-outlined text-[16px]">person</span> SEAT {seat}
-      </span>
-      <span className="font-label-sm text-label-sm text-on-surface-variant">2 Items</span>
-    </div>
-  );
-}
+/** The chosen table's ticket: items already sent, new items being added, totals and the send/pay actions */
+function TicketPad({ id }: { id: TableId }) {
+  const router = useRouter();
+  const bill = useTableBills()[id];
+  const table = FLOOR_TABLES[id];
+  const total = billTotal(bill.lines);
+  const itemCount = bill.lines.reduce((n, l) => n + l.qty, 0);
+  const newCount = bill.lines.reduce((n, l) => n + (l.unsent ? l.qty : 0), 0);
+  const seated = bill.status !== "available";
+  // Sample check details only belong to the table's original sample bill
+  const sample = isSample(id, bill) && table.ticket;
 
-function SimpleLine({ name, price }: { name: string; price: string }) {
+  const send = () => {
+    sendTicket(id);
+    router.push(`/?table=${id}`);
+  };
+
   return (
-    <div className="bg-surface-container-high rounded p-space-xs flex items-center justify-between gap-space-xs">
-      <div className="flex items-center gap-space-xs min-w-0">
-        <span className="font-label-md text-label-md text-primary font-bold px-1.5 py-0.5 rounded bg-surface-container-highest">1×</span>
-        <p className="font-body-md text-body-md text-on-surface font-medium truncate">{name}</p>
+    <>
+      {/* Ticket Header / Seat & Table Meta */}
+      <div className="bg-surface-container-high p-space-md flex flex-col gap-space-xs">
+        <div className="flex items-center justify-between gap-space-xs">
+          <div className="flex items-center gap-space-sm min-w-0">
+            <Link
+              href="/order-entry"
+              className="w-10 h-10 shrink-0 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface flex items-center justify-center transition-all active:scale-95"
+              title="Back to Choose a Table"
+              aria-label="Back to Choose a Table"
+            >
+              <span className="material-symbols-outlined text-[22px]">arrow_back</span>
+            </Link>
+            <span className="shrink-0 whitespace-nowrap px-space-sm py-0.5 rounded-lg bg-primary-container text-on-primary-container font-label-lg text-label-lg tracking-wider">{id}</span>
+            <div className="min-w-0">
+              <h2 className="font-headline-sm text-headline-sm text-on-surface leading-tight">
+                Dining Main • {seated ? `${bill.guests} Guests` : `Seats ${table.seats}`}
+              </h2>
+              <span className="font-label-sm text-label-sm text-on-surface-variant flex flex-wrap items-center gap-x-1">
+                {seated ? (
+                  <>
+                    Server: <span className="text-on-surface font-medium">{bill.server}</span> •{" "}
+                    {sample ? `Check ${table.ticket} • Open ${table.elapsed}` : "New check"}
+                  </>
+                ) : (
+                  "Walk-in • seated when the ticket is sent"
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* Sent vs. new item counts */}
+        <div className="grid grid-cols-2 gap-space-xs mt-space-xs">
+          <div className="flex items-center justify-between px-space-sm py-1.5 rounded-lg bg-secondary-container/20 text-secondary">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-secondary shrink-0"></span>
+              <span className="font-label-sm text-label-sm font-semibold truncate">Sent to Kitchen</span>
+            </div>
+            <span className="font-label-sm text-label-sm opacity-90 shrink-0">{itemCount - newCount}</span>
+          </div>
+          <div className="flex items-center justify-between px-space-sm py-1.5 rounded-lg bg-tertiary-container/25 text-tertiary">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className={`w-2 h-2 rounded-full bg-tertiary shrink-0 ${newCount ? "animate-pulse" : ""}`}></span>
+              <span className="font-label-sm text-label-sm font-semibold truncate">New • Not Sent</span>
+            </div>
+            <span className="font-label-sm text-label-sm opacity-90 shrink-0 font-medium">{newCount}</span>
+          </div>
+        </div>
       </div>
-      <span className="font-label-md text-label-md text-on-surface shrink-0 font-medium">{price}</span>
+
+      {/* Ticket Items */}
+      <div className="flex-1 overflow-y-auto p-space-sm space-y-space-sm text-on-surface" id="ticket-scroll-container">
+        {/* Shared Table Items Section */}
+        <div className="bg-surface-container rounded-lg p-space-sm space-y-space-xs">
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px] text-tertiary">dinner_dining</span>
+              <span className="font-label-sm text-label-sm text-tertiary uppercase tracking-wider font-semibold">Shared / Center Table</span>
+            </div>
+            {bill.lines.length > 0 &&
+              (newCount ? (
+                <span className="px-1.5 py-0.5 rounded bg-tertiary-container/30 text-tertiary font-label-sm text-label-sm">{newCount} Not Sent</span>
+              ) : (
+                <span className="px-1.5 py-0.5 rounded bg-secondary-container/30 text-secondary font-label-sm text-label-sm">Kitchen Fired</span>
+              ))}
+          </div>
+          {bill.lines.length === 0 && (
+            <p className="px-1 py-space-md text-center font-body-sm text-body-sm text-on-surface-variant">No items yet. Tap a dish on the menu to add it.</p>
+          )}
+          {bill.lines.map((l, i) => (
+            <TicketLine key={`${l.name}-${i}`} line={l} onQty={(d) => changeQty(id, i, d)} onRemove={() => removeLine(id, i)} />
+          ))}
+        </div>
+      </div>
+
+      {/* Ticket Totals Calculation Block */}
+      <div className="bg-surface-container-highest/60 p-space-md flex flex-col gap-space-xs">
+        <div className="flex justify-between font-body-md text-body-md text-on-surface-variant">
+          <span>Items ({itemCount} total)</span>
+          <span className="font-label-md text-label-md text-on-surface">{peso(total)}</span>
+        </div>
+        <div className="flex justify-between font-body-md text-body-md text-on-surface-variant">
+          <span>VAT 12% (Inclusive)</span>
+          <span className="font-label-md text-label-md text-on-surface">{peso(total - Math.round((total / 1.12) * 100) / 100)}</span>
+        </div>
+        <div className="flex justify-between items-baseline pt-1">
+          <span className="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">Total Balance</span>
+          <span className="font-display-lg text-headline-lg text-primary font-bold tracking-tight whitespace-nowrap">{peso(total)}</span>
+        </div>
+      </div>
+
+      {/* Ticket Bottom Action Touch Command Center */}
+      <div className="p-space-sm bg-surface-container-high grid grid-cols-2 gap-space-xs">
+        {/* Fire Course 2 (Amber) */}
+        <button
+          className="h-14 rounded-lg bg-tertiary hover:bg-tertiary-fixed text-on-tertiary font-headline-sm text-headline-sm flex items-center justify-center gap-space-xs font-semibold shadow-md active:scale-[0.98] transition-all"
+          type="button"
+        >
+          <span className="material-symbols-outlined text-[24px]">local_fire_department</span>
+          <span>Fire Mains</span>
+        </button>
+        {/* Send to Kitchen (Emerald) */}
+        <button
+          onClick={send}
+          disabled={newCount === 0}
+          className="h-14 rounded-lg bg-secondary-container hover:bg-secondary text-on-secondary-container font-headline-sm text-headline-sm flex items-center justify-center gap-space-xs font-semibold shadow-md active:scale-[0.98] transition-all disabled:opacity-40 disabled:hover:bg-secondary-container disabled:active:scale-100"
+          type="button"
+        >
+          <span className="material-symbols-outlined text-[24px]">send</span>
+          <span>Send Ticket</span>
+        </button>
+        {/* Options / Discounts */}
+        <button
+          className="min-h-12 px-space-xs rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg flex items-center justify-center text-center gap-space-xs transition-colors active:scale-[0.98]"
+          type="button"
+        >
+          <span className="material-symbols-outlined text-[20px]">tune</span>
+          <span>Discounts &amp; Comp</span>
+        </button>
+        {/* Fast Pay Trigger (Blue) */}
+        <Link
+          href={`/checkout?table=${id}`}
+          className="min-h-12 px-space-xs rounded-lg bg-primary-container hover:bg-inverse-primary text-on-primary-container font-label-lg text-label-lg flex items-center justify-center text-center gap-space-xs font-bold transition-colors active:scale-[0.98]"
+        >
+          <span className="material-symbols-outlined text-[20px]">payments</span>
+          <span>Fast Pay {peso(total)}</span>
+        </Link>
+      </div>
+    </>
+  );
+}
+
+function TicketLine({ line, onQty, onRemove }: { line: BillLine; onQty: (delta: number) => void; onRemove: () => void }) {
+  return (
+    <div className={`bg-surface-container-high rounded p-space-xs space-y-1 ${line.unsent ? "ring-1 ring-tertiary/50" : ""}`}>
+      <div className="flex items-center justify-between gap-space-xs">
+        <div className="flex items-center gap-space-xs min-w-0">
+          {line.unsent ? (
+            <div className="flex items-center bg-surface-container-highest rounded px-1 shrink-0">
+              <button type="button" onClick={() => onQty(-1)} className="text-on-surface-variant hover:text-on-surface text-label-md font-bold px-1.5 py-0.5" title="Decrease" aria-label={`One less ${line.name}`}>
+                -
+              </button>
+              <span className="font-label-md text-label-md text-on-surface px-1 font-bold">{line.qty}</span>
+              <button type="button" onClick={() => onQty(1)} className="text-on-surface-variant hover:text-on-surface text-label-md font-bold px-1.5 py-0.5" title="Increase" aria-label={`One more ${line.name}`}>
+                +
+              </button>
+            </div>
+          ) : (
+            <span className="shrink-0 font-label-md text-label-md text-primary font-bold px-1.5 py-0.5 rounded bg-surface-container-highest">{line.qty}×</span>
+          )}
+          <span className="font-body-md text-body-md text-on-surface font-medium truncate">{line.name}</span>
+        </div>
+        <div className="flex items-center gap-space-xs shrink-0">
+          <span className="font-label-md text-label-md text-on-surface font-medium">{peso(line.price)}</span>
+          {line.unsent ? (
+            <button
+              type="button"
+              onClick={onRemove}
+              className="w-7 h-7 rounded bg-surface-container-highest hover:bg-error/20 text-on-surface-variant hover:text-error flex items-center justify-center transition-colors"
+              title="Remove Item"
+              aria-label={`Remove ${line.name}`}
+            >
+              <span className="material-symbols-outlined text-[16px]">delete</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="w-7 h-7 rounded bg-surface-container-highest hover:bg-error/20 text-on-surface-variant hover:text-error flex items-center justify-center transition-colors"
+              title="Void or Hold Item"
+            >
+              <span className="material-symbols-outlined text-[16px]">more_vert</span>
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="pl-6 space-y-0.5 font-label-sm text-label-sm text-on-surface-variant">
+        {line.mods && (
+          <p className="flex items-center gap-1">
+            <span className="text-outline">•</span> {line.mods}
+          </p>
+        )}
+        {line.note && (
+          <p className="flex items-center gap-1 text-tertiary">
+            <span className="material-symbols-outlined text-[13px]">sticky_note_2</span> {line.note}
+          </p>
+        )}
+        {line.unsent ? (
+          <p className="flex items-center gap-1 text-tertiary">
+            <span className="material-symbols-outlined text-[13px]">schedule</span> New • not sent
+          </p>
+        ) : (
+          <p className="flex items-center gap-1">
+            <span className="material-symbols-outlined text-[13px] text-secondary">check_circle</span> Sent to kitchen
+          </p>
+        )}
+      </div>
     </div>
   );
 }

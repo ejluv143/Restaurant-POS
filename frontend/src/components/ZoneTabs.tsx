@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { HOTEL_ROOMS } from "@/lib/rooms";
 
-type ZoneId = "dining" | "rooms";
+export type ZoneId = "dining" | "patio" | "bar" | "private" | "rooms";
 
 const occupiedRooms = HOTEL_ROOMS.filter((r) => r.status === "occupied" || r.status === "checkout").length;
 
-const ZONES: { id: string; icon: string; label: string; count: string; href?: string }[] = [
+const ZONES: { id: ZoneId; icon: string; label: string; count: string; href: string }[] = [
   { id: "dining", icon: "table_restaurant", label: "Main Dining Room", count: "18/24", href: "/" },
-  { id: "patio", icon: "deck", label: "Patio & Terrace", count: "11/14" },
-  { id: "bar", icon: "local_bar", label: "Bar & Lounge", count: "16/18" },
-  { id: "private", icon: "meeting_room", label: "Private Dining Rm", count: "Res. 8:30p" },
+  { id: "patio", icon: "deck", label: "Patio & Terrace", count: "11/14", href: "/patio" },
+  { id: "bar", icon: "local_bar", label: "Bar & Lounge", count: "16/18", href: "/bar" },
+  { id: "private", icon: "meeting_room", label: "Private Dining Rm", count: "Res. 8:30p", href: "/private" },
   { id: "rooms", icon: "hotel", label: "Hotel Rooms", count: `${occupiedRooms}/${HOTEL_ROOMS.length}`, href: "/rooms" },
 ];
 
@@ -33,14 +33,10 @@ export default function ZoneTabs({ active }: { active: ZoneId }) {
             )}
           </>
         );
-        return z.href ? (
+        return (
           <Link key={z.id} href={z.href} aria-current={isActive ? "page" : undefined} className={`${isActive ? ACTIVE : IDLE} shrink-0`}>
             {content}
           </Link>
-        ) : (
-          <button key={z.id} className={`${IDLE} shrink-0`} type="button">
-            {content}
-          </button>
         );
       })}
     </div>
