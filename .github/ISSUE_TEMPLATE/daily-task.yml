@@ -1,0 +1,55 @@
+name: Daily task
+description: One day of planned work for one person
+title: "Day N · Mon, Sep 28 · Module: short task name"
+labels: ["daily-task"]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: Also add the matching "module:" label after creating the issue.
+      options:
+        - Cashier
+        - Admin
+        - Backend
+        - Customer
+        - Inventory
+        - Kitchen
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      placeholder: "Mon, Oct 12, 2026 (Sprint 2 · Day 1)"
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should be true at the end of the day, in one or two sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: How anyone can check the day's work is finished.
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where to look
+      description: Files or screens to start from.
