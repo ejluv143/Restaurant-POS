@@ -34,7 +34,7 @@ export default function CheckoutReceipt({
         className="print-area w-full max-w-sm max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6 font-mono text-sm text-zinc-900 shadow-xl print:max-h-none print:shadow-none"
       >
         <div className="text-center">
-          <p className="text-lg font-bold">THE OAKWOOD BISTRO</p>
+          <p className="text-lg font-bold">SYNCHUB POS</p>
           <p className="text-xs">Terminal #04 • Dining Main</p>
           <p className="mt-2 border border-zinc-900 px-2 py-1 text-xs font-bold">THIS IS NOT AN OFFICIAL RECEIPT</p>
           <p className="mt-2">Receipt {payment.receiptNo}</p>

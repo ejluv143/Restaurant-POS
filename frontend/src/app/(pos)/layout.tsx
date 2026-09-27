@@ -20,7 +20,7 @@ export default function PosLayout({ children }: { children: React.ReactNode }) {
               src="https://lh3.googleusercontent.com/aida/AEtjO1Ufn0ajT4HGsOQo9540HhgvWi5-OR8RF9jxnjNOcYch-E9VVFzFhmFS7QhEMn3x2TE248oa2lpuTHVjkxu8JFsOhaEZG9pH9Mf33GAKm4A4Vhcic4MhYonk9OXFtzAI8-41qL5JGELBpr72RXYpS3X3dYcZrUju8RauQidNBKOVdq_5rdakpO0DxTUKTuML00ANSvx3eQ_EYw_xij9WJVq77T-jA7XFXRn8Ykyhi-AP188kMH4Xm_luWQbH"
             />
             <div className="flex flex-col min-w-0">
-              <span className="font-headline-sm text-headline-sm text-on-surface leading-tight tracking-tight truncate">The Oakwood Bistro</span>
+              <span className="font-headline-sm text-headline-sm text-on-surface leading-tight tracking-tight truncate">Synchub POS</span>
               <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-space-xs">
                 Terminal #04 • Dining Main
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-secondary ml-1 animate-pulse"></span>

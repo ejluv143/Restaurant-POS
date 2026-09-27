@@ -427,7 +427,7 @@ export default function FloorPlan({ zone }: { zone: ZoneId }) {
             <div className="relative z-10 pt-space-md">
               <div className="flex flex-wrap items-center justify-between gap-x-space-sm pb-space-xs">
                 <span className="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-tertiary text-[18px]">wine_bar</span> Oakwood Bar Counter Rail
+                  <span className="material-symbols-outlined text-tertiary text-[18px]">wine_bar</span> Synchub Bar Counter Rail
                 </span>
                 <span className="font-label-sm text-label-sm text-on-surface-variant">Bartender: Jomar L. • 5/6 Occupied</span>
               </div>

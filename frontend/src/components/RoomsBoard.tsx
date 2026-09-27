@@ -42,7 +42,7 @@ function Qr({ svg, className }: { svg: string; className: string }) {
 function QrCard({ room, qr }: { room: HotelRoom; qr: QrMap[string] }) {
   return (
     <div className="bg-white rounded-xl p-space-md flex flex-col items-center gap-space-xs text-center break-inside-avoid">
-      <span className="font-label-sm text-label-sm uppercase tracking-wider text-[#434655]">The Oakwood Bistro • Room Service</span>
+      <span className="font-label-sm text-label-sm uppercase tracking-wider text-[#434655]">Synchub POS • Room Service</span>
       <Qr svg={qr.svg} className="w-48 h-48" />
       <span className="font-headline-md text-headline-md font-bold text-[#0b1326]">Room {room.number}</span>
       <span className="font-body-sm text-body-sm text-[#434655]">Scan to order food &amp; drinks to your room</span>

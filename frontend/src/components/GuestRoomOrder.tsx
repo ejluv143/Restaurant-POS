@@ -75,7 +75,7 @@ export default function GuestRoomOrder({ room }: { room: string }) {
 
   const header = (
     <header className="sticky top-0 z-20 bg-surface-container/95 backdrop-blur-md px-space-lg py-space-md shadow-[0_4px_16px_rgba(0,0,0,0.35)]">
-      <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">The Oakwood Bistro • Room Service</span>
+      <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Synchub POS • Room Service</span>
       <div className="flex items-center justify-between">
         <h1 className="font-headline-lg text-headline-lg text-on-surface font-bold">Room {room}</h1>
         <span className="flex items-center gap-1 font-label-sm text-label-sm text-secondary">
