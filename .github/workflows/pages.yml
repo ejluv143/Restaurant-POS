@@ -28,8 +28,9 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
-      # Static hosting has no server: drop the room-order API and the guest QR ordering page
-      - run: rm -rf "src/app/api" "src/app/order"
+      # Static hosting has no server or database: everything except the marketing landing page needs one,
+      # so drop the APIs, guest ordering, staff screens, sign-in and the proxy
+      - run: rm -rf "src/app/api" "src/app/order" "src/app/(staff)" "src/app/login" "src/proxy.ts" "src/components/staff"
       - run: npx next build
         env:
           GITHUB_PAGES: "1"

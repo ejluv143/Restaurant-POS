@@ -102,10 +102,18 @@
   --text-body-lg: 16px;
   --text-body-lg--line-height: 24px;
   --text-body-lg--font-weight: 400;
+  --text-headline-xl: 40px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 800;
   --text-display-lg: 40px;
   --text-display-lg--line-height: 48px;
   --text-display-lg--letter-spacing: -0.02em;
   --text-display-lg--font-weight: 700;
+  --text-headline-lg-mobile: 24px;
+  --text-headline-lg-mobile--line-height: 32px;
+  --text-headline-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-lg-mobile--font-weight: 600;
   --text-headline-sm: 18px;
   --text-headline-sm--line-height: 24px;
   --text-headline-sm--font-weight: 600;
@@ -158,6 +166,113 @@
   .print-area {
     position: absolute;
     inset: 0 auto auto 0;
+  }
+}
+
+/* Sync Hub Resto guest theme (warm terracotta), scoped to the customer QR ordering screens and table cards.
+   Tailwind utilities read these variables, so the same class names re-skin inside this wrapper. */
+.theme-resto {
+  --color-background: #141312;
+  --color-on-background: #e6e1df;
+  --color-surface: #141312;
+  --color-surface-dim: #141312;
+  --color-surface-bright: #3b3937;
+  --color-surface-variant: #363433;
+  --color-surface-container-lowest: #0f0e0d;
+  --color-surface-container-low: #1d1b1a;
+  --color-surface-container: #211f1e;
+  --color-surface-container-high: #2b2a28;
+  --color-surface-container-highest: #363433;
+  --color-on-surface: #e6e1df;
+  --color-on-surface-variant: #dfc0b7;
+  --color-inverse-surface: #e6e1df;
+  --color-inverse-on-surface: #32302f;
+  --color-outline: #a78b83;
+  --color-outline-variant: #58423c;
+  --color-primary: #ffb5a0;
+  --color-on-primary: #601500;
+  --color-primary-container: #ea6944;
+  --color-on-primary-container: #541100;
+  --color-primary-fixed: #ffdbd1;
+  --color-primary-fixed-dim: #ffb5a0;
+  --color-inverse-primary: #a73918;
+  --color-surface-tint: #ffb5a0;
+  --color-secondary: #feb956;
+  --color-on-secondary: #452b00;
+  --color-secondary-container: #a06901;
+  --color-on-secondary-container: #fffbff;
+  --color-tertiary: #a5d2a2;
+  --color-on-tertiary: #113816;
+  --color-tertiary-container: #719b6f;
+  --color-on-tertiary-container: #08310f;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2rem;
+
+  --font-body-sm: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-label-sm: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-label-md: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-label-lg: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--letter-spacing: 0.04em;
+  --text-label-sm--font-weight: 700;
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.02em;
+  --text-label-md--font-weight: 600;
+  --text-label-lg: 14px;
+  --text-label-lg--line-height: 18px;
+  --text-label-lg--letter-spacing: 0.01em;
+  --text-label-lg--font-weight: 600;
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 40px;
+  --text-headline-lg--letter-spacing: -0.015em;
+  --text-headline-xl: 40px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 800;
+
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+}
+
+/* Landing page accents (warm hearth glow, raised KDS card edge, live-status pulse) */
+@utility hearth-glow {
+  box-shadow: 0 0 60px -15px color-mix(in srgb, var(--color-primary-container) 22%, transparent);
+}
+@utility kds-card-border {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    0 4px 16px -2px rgb(0 0 0 / 0.5);
+}
+@utility amber-pulse {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-ring {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.15);
   }
 }
 
